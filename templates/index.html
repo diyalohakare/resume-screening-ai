@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resume Screening AI</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+<body>
+
+<div class="box">
+    <h1>Resume Screening AI</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        <label>Upload Resume (PDF)</label>
+        <input type="file" name="resume" required>
+
+        <label>Job Description</label>
+        <textarea name="job" required></textarea>
+
+        <button type="submit">Analyze</button>
+    </form>
+
+    {% if result %}
+    <div class="result">
+        <h2>{{result}}</h2>
+        <p>Match: {{match}}%</p>
+        <h3>Extracted Skills</h3>
+
+        <ul>
+            {% for skill in skills %}
+            <li>{{ skill }}</li>
+            {% endfor %}
+        </ul>
+        <h3>Resume Match Graph</h3>
+
+        <canvas id="skillChart"></canvas>
+        <canvas id="scoreChart"></canvas>
+
+    </div>
+    {% endif %}
+</div>
+<script>
+
+var match = {{ match }};
+var notMatch = 100 - match;
+
+// Pie chart
+new Chart(document.getElementById("skillChart"), {
+    type: "pie",
+    data: {
+        labels: ["Matched", "Not Matched"],
+        datasets: [{
+            data: [match, notMatch],
+            backgroundColor: ["#4CAF50", "#f44336"]
+        }]
+    }
+});
+
+// Bar chart
+new Chart(document.getElementById("scoreChart"), {
+    type: "bar",
+    data: {
+        labels: ["Resume Score"],
+        datasets: [{
+            label: "Match %",
+            data: [match],
+            backgroundColor: "#2196F3"
+        }]
+    }
+});
+
+</script>
+</body>
+</html>
