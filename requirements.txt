@@ -1,6 +1,6 @@
 flask
+pdfplumber
 pandas
 numpy
 scikit-learn
-nltk
 gunicorn
